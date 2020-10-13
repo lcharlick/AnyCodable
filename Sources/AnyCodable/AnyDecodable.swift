@@ -31,19 +31,19 @@ import Foundation
      let dictionary = try! decoder.decode([String: AnyDecodable].self, from: json)
  */
 #if swift(>=5.1)
-@frozen public struct AnyDecodable: Decodable {
-    public let value: Any
+@frozen public struct AnyDecodable: Decodable, Hashable {
+    public var value: AnyHashable
 
-    public init<T>(_ value: T?) {
-        self.value = value ?? ()
+    public init<T: Hashable>(_ value: T?) {
+        self.value = AnyHashable(value)
     }
 }
 #else
 public struct AnyDecodable: Decodable {
-    public let value: Any
+    public var value: AnyHashable
 
-    public init<T>(_ value: T?) {
-        self.value = value ?? ()
+    public init<T: Hashable>(_ value: T?) {
+        self.value = AnyHashable(value)
     }
 }
 #endif
@@ -51,13 +51,13 @@ public struct AnyDecodable: Decodable {
 #if swift(>=4.2)
 @usableFromInline
 protocol _AnyDecodable {
-    var value: Any { get }
-    init<T>(_ value: T?)
+    var value: AnyHashable { get }
+    init<T: Hashable>(_ value: T?)
 }
 #else
 protocol _AnyDecodable {
-    var value: Any { get }
-    init<T>(_ value: T?)
+    var value: AnyHashable { get }
+    init<T: Hashable>(_ value: T?)
 }
 #endif
 

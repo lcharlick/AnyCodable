@@ -12,16 +12,16 @@
  - SeeAlso: `AnyDecodable`
  */
 #if swift(>=5.1)
-@frozen public struct AnyCodable: Codable {
-    public let value: Any
+@frozen public struct AnyCodable: Codable, Hashable {
+    public let value: AnyHashable
 
-    public init<T>(_ value: T?) {
-        self.value = value ?? ()
+    public init<T: Hashable>(_ value: T?) {
+        self.value = AnyHashable(value)
     }
 }
 #else
 public struct AnyCodable: Codable {
-    public let value: Any
+    public let value: AnyHashable
 
     public init<T>(_ value: T?) {
         self.value = value ?? ()
@@ -31,7 +31,7 @@ public struct AnyCodable: Codable {
 
 extension AnyCodable: _AnyEncodable, _AnyDecodable {}
 
-extension AnyCodable: Equatable {
+extension AnyCodable {
     public static func == (lhs: AnyCodable, rhs: AnyCodable) -> Bool {
         switch (lhs.value, rhs.value) {
         case is (Void, Void):

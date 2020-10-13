@@ -30,18 +30,18 @@ import Foundation
  */
 #if swift(>=5.1)
 @frozen public struct AnyEncodable: Encodable {
-    public let value: Any
+    public let value: AnyHashable
 
-    public init<T>(_ value: T?) {
-        self.value = value ?? ()
+    public init<T: Hashable>(_ value: T?) {
+        self.value = AnyHashable(value)
     }
 }
 #else
 public struct AnyEncodable: Encodable {
-    public let value: Any
+    public let value: AnyHashable
 
-    public init<T>(_ value: T?) {
-        self.value = value ?? ()
+    public init<T: Hashable>(_ value: T?) {
+        self.value = AnyHashable(value)
     }
 }
 #endif
@@ -49,13 +49,13 @@ public struct AnyEncodable: Encodable {
 #if swift(>=4.2)
 @usableFromInline
 protocol _AnyEncodable {
-    var value: Any { get }
-    init<T>(_ value: T?)
+    var value: AnyHashable { get }
+    init<T: Hashable>(_ value: T?)
 }
 #else
 protocol _AnyEncodable {
-    var value: Any { get }
-    init<T>(_ value: T?)
+    var value: AnyHashable { get }
+    init<T: Hashable>(_ value: T?)
 }
 #endif
 
@@ -112,9 +112,9 @@ extension _AnyEncodable {
         case let url as URL:
             try container.encode(url)
 #endif
-        case let array as [Any?]:
+        case let array as [AnyHashable?]:
             try container.encode(array.map { AnyEncodable($0) })
-        case let dictionary as [String: Any?]:
+        case let dictionary as [String: AnyHashable?]:
             try container.encode(dictionary.mapValues { AnyEncodable($0) })
         default:
             let context = EncodingError.Context(codingPath: container.codingPath, debugDescription: "AnyEncodable value cannot be encoded")
@@ -237,7 +237,7 @@ extension AnyEncodable: ExpressibleByDictionaryLiteral {}
 
 extension _AnyEncodable {
     public init(nilLiteral _: ()) {
-        self.init(nil as Any?)
+        self.init(nil as AnyHashable?)
     }
 
     public init(booleanLiteral value: Bool) {
@@ -260,11 +260,11 @@ extension _AnyEncodable {
         self.init(value)
     }
 
-    public init(arrayLiteral elements: Any...) {
+    public init(arrayLiteral elements: AnyHashable...) {
         self.init(elements)
     }
 
-    public init(dictionaryLiteral elements: (AnyHashable, Any)...) {
-        self.init([AnyHashable: Any](elements, uniquingKeysWith: { first, _ in first }))
+    public init(dictionaryLiteral elements: (AnyHashable, AnyHashable)...) {
+        self.init([AnyHashable: AnyHashable](elements, uniquingKeysWith: { first, _ in first }))
     }
 }
