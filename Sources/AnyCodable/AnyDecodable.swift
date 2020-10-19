@@ -34,7 +34,7 @@ import Foundation
 @frozen public struct AnyDecodable: Decodable, Hashable {
     public var value: AnyHashable
 
-    public init<T: Hashable>(_ value: T?) {
+    public init<T: Hashable>(_ value: T) {
         self.value = AnyHashable(value)
     }
 }
@@ -42,7 +42,7 @@ import Foundation
 public struct AnyDecodable: Decodable {
     public var value: AnyHashable
 
-    public init<T: Hashable>(_ value: T?) {
+    public init<T: Hashable>(_ value: T) {
         self.value = AnyHashable(value)
     }
 }
@@ -52,12 +52,12 @@ public struct AnyDecodable: Decodable {
 @usableFromInline
 protocol _AnyDecodable {
     var value: AnyHashable { get }
-    init<T: Hashable>(_ value: T?)
+    init<T: Hashable>(_ value: T)
 }
 #else
 protocol _AnyDecodable {
     var value: AnyHashable { get }
-    init<T: Hashable>(_ value: T?)
+    init<T: Hashable>(_ value: T)
 }
 #endif
 

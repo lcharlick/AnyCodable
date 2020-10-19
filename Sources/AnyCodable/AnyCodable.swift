@@ -15,7 +15,7 @@
 @frozen public struct AnyCodable: Codable, Hashable {
     public let value: AnyHashable
 
-    public init<T: Hashable>(_ value: T?) {
+    public init<T: Hashable>(_ value: T) {
         self.value = AnyHashable(value)
     }
 }

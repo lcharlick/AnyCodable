@@ -32,7 +32,7 @@ import Foundation
 @frozen public struct AnyEncodable: Encodable {
     public let value: AnyHashable
 
-    public init<T: Hashable>(_ value: T?) {
+    public init<T: Hashable>(_ value: T) {
         self.value = AnyHashable(value)
     }
 }
@@ -40,7 +40,7 @@ import Foundation
 public struct AnyEncodable: Encodable {
     public let value: AnyHashable
 
-    public init<T: Hashable>(_ value: T?) {
+    public init<T: Hashable>(_ value: T) {
         self.value = AnyHashable(value)
     }
 }
@@ -50,12 +50,12 @@ public struct AnyEncodable: Encodable {
 @usableFromInline
 protocol _AnyEncodable {
     var value: AnyHashable { get }
-    init<T: Hashable>(_ value: T?)
+    init<T: Hashable>(_ value: T)
 }
 #else
 protocol _AnyEncodable {
     var value: AnyHashable { get }
-    init<T: Hashable>(_ value: T?)
+    init<T: Hashable>(_ value: T)
 }
 #endif
 
